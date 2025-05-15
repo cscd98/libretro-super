@@ -73,7 +73,11 @@ check_deps()
 {
 	if [ $ENABLE_GLES ]; then
 		echo "=== Enabling OpenGL ES ==="
-		export ENABLE_GLES="--enable-gles"
+		export ENABLE_GLES="--enable-opengles"
+	fi
+	if [ $ENABLE_GLES_3_2 ]; then
+		echo "=== Enabling OpenGL ES 3.2 ==="
+		export ENABLE_GLES_3_2="--enable-opengles3_2"
 	fi
 	if [ $ARM_NEON ]; then
 		echo "=== Enabling ARM NEON support ==="
@@ -94,7 +98,12 @@ check_deps()
 	fi
 	if [ "$CORTEX_A9" ]; then
 		echo "=== Enabling Cortex A9 CFLAGS ==="
-		export RARCHCFLAGS="${RARCHCFLAGS} -mcpu=cortex-a9 -mtune=cortex-a9"
+		if [ "$CORTEX_A9_TUNE_A53" ]; then
+			echo "=== Tuning for A53 CLAGS ==="
+			export RARCHCFLAGS="${RARCHCFLAGS} -mcpu=cortex-a9 -mtune=cortex-a53"
+		else
+			export RARCHCFLAGS="${RARCHCFLAGS} -mcpu=cortex-a9 -mtune=cortex-a9"
+		fi
 	fi
 
 	if [ $ARM_NEON ]; then
@@ -113,7 +122,7 @@ build_retroarch()
 		check_deps
 		
 		if [ -z "${NOCLEAN}" ]; then
-			./configure $ENABLE_GLES $ENABLE_NEON
+			./configure $ENABLE_GLES $ENABLE_GLES_3_2 $ENABLE_NEON
 			${MAKE} -f Makefile platform=${FORMAT_COMPILER_TARGET} CC="gcc ${RARCHCFLAGS}" $COMPILER -j$JOBS clean || die "Failed to clean RetroArch"
 		fi
 		${MAKE} -f Makefile platform=${FORMAT_COMPILER_TARGET} CC="gcc ${RARCHCFLAGS}" $COMPILER -j$JOBS || die "Failed to build RetroArch"

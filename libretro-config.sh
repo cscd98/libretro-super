@@ -18,6 +18,9 @@
 #if uncommented, will build cores with Cortex A9 compiler optimizations
 #export CORTEX_A9=1
 
+#if uncommented, will tune cores for Cortex A53 (if CORTEX_A9=1)
+#export CORTEX_A9_TUNE_A53=1
+
 #if uncommented, will build cores with ARM hardfloat ABI
 #export ARM_HARDFLOAT=1
 
@@ -36,6 +39,10 @@ export BUILD_LIBRETRO_GL=1
 #if uncommented, will build cores with OpenGL ES 2 support. Not needed
 #for platform-specific cores - only for generic core builds (ie. libretro-build.sh)
 #export ENABLE_GLES=1
+
+#if uncommented, will build cores with OpenGLES 3.2 support. Not needed
+#for platform-specific cores - only for generic core builds (ie. libretro-build.sh)
+#export ENABLE_GLES_3_2=1
 
 #Statically link cores
 #export STATIC_LINKING=1
