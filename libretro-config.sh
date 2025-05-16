@@ -18,9 +18,6 @@
 #if uncommented, will build cores with Cortex A9 compiler optimizations
 #export CORTEX_A9=1
 
-#if uncommented, will tune cores for Cortex A53 (if CORTEX_A9=1)
-#export CORTEX_A9_TUNE_A53=1
-
 #if uncommented, will build cores with ARM hardfloat ABI
 #export ARM_HARDFLOAT=1
 
@@ -39,10 +36,6 @@ export BUILD_LIBRETRO_GL=1
 #if uncommented, will build cores with OpenGL ES 2 support. Not needed
 #for platform-specific cores - only for generic core builds (ie. libretro-build.sh)
 #export ENABLE_GLES=1
-
-#if uncommented, will build cores with OpenGLES 3.2 support. Not needed
-#for platform-specific cores - only for generic core builds (ie. libretro-build.sh)
-#export ENABLE_GLES_3_2=1
 
 #Statically link cores
 #export STATIC_LINKING=1
@@ -684,6 +677,20 @@ case "$platform" in
 		# Make sure that the cross bins you need are first in your path
 		CXX11="clang++ -std=c++11 -stdlib=libc++ -miphoneos-version-min=5.0"
 
+		;;
+
+	webos)
+		DIST_DIR="webos"
+		FORMAT_EXT=so
+		FORMAT_COMPILER_TARGET=armv
+
+		# Makefile.libretro per core will need a webos section, but for now:
+		WEBOS_CFLAGS="-mcpu=cortex-a9 -mtune=cortex-a53 -mfloat-abi=softfp"
+
+		CC="arm-webos-linux-gnueabi-gcc $WEBOS_CFLAGS"
+		CXX="arm-webos-linux-gnueabi-g++ $WEBOS_CFLAGS"
+		CXX11="arm-webos-linux-gnueabi-g++ -std=c++11 -stdlib=libc++ $WEBOS_CFLAGS"
+		CXX17="arm-webos-linux-gnueabi-g++ -std=c++17 -stdlib=libc++ $WEBOS_CFLAGS"
 		;;
 
 	##
